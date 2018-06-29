@@ -1,0 +1,60 @@
+
+csyhsir@163.com
+小程序开发文档地址：https://developers.weixin.qq.com/miniprogram/dev/
+
+1.新邮箱申请小程序注册https://mp.weixin.qq.com/wxopen/waregister?action=step1
+2.“设置”-“开发设置” 找到小程序 AppID
+3.到“微信开发者工具”新增项目，选择 QuickStart，目录下则生成实例文件
+4.每个页面有4种文件类型
+	.json  配置文件
+	.wxml  模板文件
+	.wxss  样式文件
+	.js    脚本逻辑文件
+5.根目录有一个 app.json 和 project.config.json
+	app.json 是对当前小程序的全局配置 https://developers.weixin.qq.com/miniprogram/dev/framework/config.html
+	project.config.json 工具配置，用户操作习惯等
+6.开始开发项目。。。
+
+
+7.小程序生命周期
+onLaunch
+onShow()
+onHide()
+8.页面的生命周期
+onLoad: 页面加载，一个页面只会调用一次。
+onShow: 页面显示，每次打开页面都会调用一次。
+onReady: 页面初次渲染完成，一个页面只会调用一次，代表页面已经准备妥当，可以和视图层进行交互。
+onHide: 页面隐藏，当navigateTo或底部tab切换时调用。
+onUnload: 页面卸载
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

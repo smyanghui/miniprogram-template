@@ -13,19 +13,15 @@
   <view class="outBox">
     <view class="leftBox">
       <scroll-view scroll-y="true" scroll-with-animation bindscroll="scroll" scroll-into-view="{{sorftPos}}" style="height: {{wHeight}}px;">
-        <view class="sTit">众安保险</view>
         <view class="sTit">asdfa</view>
         <view class="sTit">adfad</view>
         <view class="sTit">安联大厦</view>
-        <view class="sTit">众安保险</view>
         <view class="sTit">asdfa</view>
         <view class="sTit">adfad</view>
         <view class="sTit">安联大厦</view>
-        <view class="sTit">众安保险</view>
         <view class="sTit">asdfa</view>
         <view class="sTit">adfad</view>
         <view class="sTit">安联大厦</view>
-        <view class="sTit">众安保险</view>
         <view class="sTit">asdfa</view>
         <view class="sTit">adfad</view>
         <view class="sTit">安联大厦</view>
