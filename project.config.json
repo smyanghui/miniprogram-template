@@ -1,0 +1,15 @@
+{
+	"description": "aa",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx38c2b93884cce8c6",
+	"projectname": "mytestaa",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}

@@ -1,0 +1,70 @@
+<style lang="less">
+.outBox {
+  width: 750rpx; height: 100%; display: flex;
+  .leftBox { width: 200rpx; background-color: #f60; }
+  .sortBox { height: 150rpx; display: table; }
+}
+.sortName { text-align: center; display: table-cell; vertical-align: middle; }
+.sTit { text-align: center; padding: 5px 0; }
+.rightBox { flex: 1; }
+</style>
+
+<template>
+  <view class="outBox">
+    <view class="leftBox">
+      <scroll-view scroll-y="true" scroll-with-animation bindscroll="scroll" scroll-into-view="{{sorftPos}}" style="height: {{wHeight}}px;">
+        <view class="sTit">众安保险</view>
+        <view class="sTit">asdfa</view>
+        <view class="sTit">adfad</view>
+        <view class="sTit">安联大厦</view>
+        <view class="sTit">众安保险</view>
+        <view class="sTit">asdfa</view>
+        <view class="sTit">adfad</view>
+        <view class="sTit">安联大厦</view>
+        <view class="sTit">众安保险</view>
+        <view class="sTit">asdfa</view>
+        <view class="sTit">adfad</view>
+        <view class="sTit">安联大厦</view>
+        <view class="sTit">众安保险</view>
+        <view class="sTit">asdfa</view>
+        <view class="sTit">adfad</view>
+        <view class="sTit">安联大厦</view>
+      </scroll-view>
+    </view>
+    <view class="rightBox">asdfasdf<text data-hi-kdasd="WeChat" bindtap="goscroll">测试</text></view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import common from '../mixins/common';
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'test'
+    };
+    data = {
+      sorftPos: "",
+      wHeight: 0,
+    };
+
+    mixins = [common];
+
+    onLoad() {
+
+      // let aasdfa = await wepy.getSystemInfo();
+      console.log(this.SystemInfo);
+      // wx.getSystemInfo({
+      //     success: (userinfo) => {
+      //       console.log(userinfo);
+      //       this.wHeight = userinfo.windowHeight;
+      //       this.$apply();
+      //     }
+      // });
+    }
+
+    scroll(e) {
+        console.log(e)
+    }
+  }
+</script>
