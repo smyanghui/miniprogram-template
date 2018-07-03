@@ -1,0 +1,106 @@
+<style lang="less">
+.itemList {
+  height: 200rpx; padding: 10rpx; border-bottom: 1rpx solid #eee;
+  .imgBox {
+    float: left; width: 200rpx;
+    image { width: 180rpx; height: 180rpx; display: block;}
+  }
+  .txtBox {
+    float: right; width: 330rpx;
+    .name {
+      font-size: 16px; height: 24px;
+      text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+    }
+    .remark {
+      font-size: 12px; color: #666; height: 28px; line-height: 14px; overflow: hidden;
+    }
+  }
+  .choiceBox {
+    line-height: 24px; margin-top: 10px;
+    .price {
+      float: left; width: 50%;
+      font-size: 18px; color: #f60;
+      text { font-size: 12px;}
+    }
+    .choiceRight {
+      float: right; width: 50%; text-align: right;
+      .iconfont, .num { display: inline-block; font-size: 16px;}
+      .num { padding: 0 5px;}
+      .iconfont {
+        width: 24px; height: 24px; text-align: center;
+        border-radius: 24px; background-color: #59D178; color: #fff;
+      }
+      .choiceBtn {
+        padding: 0 12px; display: inline-block; font-size: 14px;
+        border-radius: 24px; background-color: #59D178; color: #fff;
+      }
+    }
+  }
+}
+</style>
+
+<template>
+
+  <view class="itemList">
+    <view class="imgBox">
+      <image src="{{item.imgUrl}}"></image>
+    </view>
+    <view class="txtBox">
+      <view class="name">{{item.itemName}}</view>
+      <view class="remark">{{item.remark}}</view>
+      <view class="choiceBox">
+        <view class="price"><text>￥</text>{{item.price}}</view>
+        <view class="choiceRight">
+          <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
+          <text class="num">{{item.cNum}}</text>
+          <text class="iconfont icon-add" @tap="add"></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class List extends wepy.component {
+    data = {
+      list: [
+        {
+          id: '0',
+          title: 'loading'
+        }
+      ]
+    }
+
+    props = {
+      item: {
+        type: String,
+        default: [],
+      },
+    }
+
+    methods = {
+
+      // 减商品
+      minus(id) {
+        const num = this.item.cNum;
+        if (num === 0) return;
+        this.item.cNum = num - 1;
+        // console.log(id, this.item);
+      },
+
+      // 加商品
+      add() {
+        const num = this.item.cNum;
+        if (num === 99) return;
+        this.item.cNum = num + 1;
+      }
+
+    }
+
+    onLoad () {
+    }
+  }
+</script>
