@@ -1,0 +1,173 @@
+<style lang="less">
+.outBox {
+  width: 100%; height: 100%; display: flex;
+  .leftBox { width: 200rpx;}
+  .rightBox { flex: 1; }
+}
+.sTit { text-align: center; padding: 5px 0; }
+</style>
+
+<template>
+  <view class="outBox">
+    <view class="leftBox">
+      <scroll-view scroll-y scroll-with-animation bindscroll="scroll" scroll-into-view="{{sorftPos}}" style="height: {{SystemInfo.windowHeight}}px;">
+        <view class="sTit" @tap="buy">asdfa</view>
+        <view class="sTit" @tap="cspec">adfa发d</view>
+      </scroll-view>
+    </view>
+    <view class="rightBox">
+      <scroll-view scroll-y scroll-with-animation bindscroll="scroll" scroll-into-view="{{itemPos}}" style="height: {{SystemInfo.windowHeight}}px;">
+
+        <!-- <block wx:for="{{allItems}}" wx:for-index="key" wx:for-item="items">
+          <view>{{cate[key].name}}</view>
+          <repeat for="{{items}}" index="index" item="sitem">
+            <itemlist :item="sitem"></itemlist>
+          </repeat>
+        </block> -->
+
+        <repeat for="{{allItems}}" index="index" item="items">
+          <view>{{cate[index].name}}</view>
+          <itemlist :items="items"></itemlist>
+        </repeat>
+
+      </scroll-view>
+    </view>
+  </view>
+
+  <spec :visiable.sync="showSpec"></spec>
+
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import common from '../mixins/common';
+  import Itemlist from '../components/itemlist';
+  import Spec from '../components/spec';
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'test1231'
+    };
+
+    data = {
+      sorftPos: "",
+      items: [],
+      list: {},
+      cate: {},
+      allItems: {},
+      showSpec: false,
+      item: {},
+    };
+
+    mixins = [common];
+
+    components = {
+      itemlist: Itemlist,
+      spec: Spec,
+    }
+
+    methods = {
+      buy() {
+        console.log(123, this.allItems);
+        this.$invoke('spec', 'aanspec', '123');
+      },
+
+      cspec() {
+        this.showSpec = true;
+      },
+    }
+
+    onLoad() {
+
+      // let aasdfa = await wepy.getSystemInfo();
+      // console.log(this.SystemInfo);
+      this.rItems();
+
+    }
+
+    rData() {
+      const aa = 123;
+      return {"code":0,"msg":"OK","data":{"goods":[{"category_id":3,"category_name":"面包","items":[{"id":10,"goods_name":"玉米调理面包","goods_ad":"","goods_logo":"sdfad","category_id":3,"goods_order":10000,"goods_price":1000,"goods_mprice":1500,"goods_freight":0,"is_limit":0,"is_spec":1,"goods_point":0,"goods_num":0,"goods_sellnum":0,"goods_collectnum":0,"goods_commentnum":0,"goods_status":1,"status":1,"created_at":0,"updated_at":0,"deleted_at":0,"spec_group_info":[{"spec_group_id":11,"spec_group_name":"尺寸","spec_group_beizhu":"蛋糕尺寸","spec_group_list":[{"spec_id":"12","spec_name":"6寸"},{"spec_id":"14","spec_name":"10寸"}]},{"spec_group_id":25,"spec_group_name":"温度","spec_group_beizhu":"","spec_group_list":[{"spec_id":"26","spec_name":"常温"},{"spec_id":"27","spec_name":"加热"}]}],"goods_skuid":[{"skuid":8,"goods_price":1800,"goods_mprice":1900,"is_limit":0,"goods_num":0,"goods_sellnum":0,"spec_ids":"26,12","spec_ids_ary":["26","12"],"spec_info":[{"spec_id":"26","spec_name":"常温","spec_pid":25},{"spec_id":"12","spec_name":"6寸","spec_pid":11}]},{"skuid":9,"goods_price":1850,"goods_mprice":1900,"is_limit":0,"goods_num":0,"goods_sellnum":0,"spec_ids":"27,14","spec_ids_ary":["27","14"],"spec_info":[{"spec_id":"27","spec_name":"加热","spec_pid":25},{"spec_id":"14","spec_name":"10寸","spec_pid":11}]}]},]}]}}
+    }
+
+    // 格式化数据
+    formatItems(listArr) {
+      let cate = {};
+      let allItems = {};
+      for (let i in listArr) {
+        const items = listArr[i].items || [];
+        if (items.length == 0) continue;
+        cate[listArr[i].category_id] = {name: listArr[i].category_name};
+        let arrItem = [];
+        for (let j in items) {
+          let itemsList = items[j];
+          let group = {};
+          for (let k in itemsList.goods_skuid) {
+            let sku = itemsList.goods_skuid[k];
+            group[sku.spec_ids] = {skuid: sku.skuid, price: sku.goods_price};
+          }
+          arrItem.push({
+            itemId: itemsList.id,
+            itemName: itemsList.goods_name,
+            cNum: 0,
+            imgUrl: itemsList.goods_logo || '/src/images/item.png',
+            remark: itemsList.goods_desc || '送蜡烛10支，每个账号限买一个',
+            price: itemsList.goods_price,
+            isSpec: itemsList.is_spec,
+            spec: itemsList.spec_group_info,
+            selectSpec: [],
+            group: group
+          });
+        }
+        allItems[listArr[i].category_id] = arrItem;
+      }
+      return {
+        cate: cate,
+        allItems: allItems,
+      }
+    }
+
+    // 获取商品
+    rItems() {
+
+      // wx.request({
+      //   url: 'https://devapi.nfangbian.com/index/goods',
+      //   success: function (data) {
+      //       console.log(data);
+      //   }
+      // });
+
+      const origiData = this.rData();
+
+      const itemData = this.formatItems(origiData.data.goods);
+      console.log(itemData);
+
+      this.cate = itemData.cate;
+      this.allItems = itemData.allItems;
+
+      // setTimeout(() => {
+      //   this.list = [{
+      //     itemId: 1,
+      //     imgSrc: 'adfaa',
+      //     itemName: '大乐山大佛卡戴珊饭卡上放大镜打发按时发打发萨达',
+      //     remark: 'adfa',
+      //     price: '123.00',
+      //     cNum: 2,
+      //   }, {
+      //     itemId: 2,
+      //     imgSrc: 'adsfa',
+      //     itemName: '时发打发萨达',
+      //     remark: 'adfa',
+      //     price: '100.00',
+      //     cNum: 5,
+      //   }];
+      //   this.$apply();
+      // }, 1000);
+
+    }
+
+    scroll(e) {
+        console.log(e)
+    }
+  }
+</script>

@@ -1,0 +1,81 @@
+<style lang="less">
+.outBox {}
+
+</style>
+
+<template>
+  <view wx:if="{{ready}}" class="outBox">
+
+    <input placeholder="输入要地址" value="{{searchData}}" @blur="search" />
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import common from '../mixins/common';
+  import bmap from '../utils/bmap-wx.min.js';
+
+  const BMap = new bmap.BMapWX({ ak: 'dQWhRZdi0U8hDE9YaYGoIvPBmvNeYGIV' });
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'test1231'
+    };
+
+    data = {
+      sorftPos: "",
+      searchData: '上海',
+      weatherData: {},
+    };
+
+    mixins = [common];
+
+    components = {
+    }
+
+    methods = {
+      buy() {
+        // console.log(123, this.allItems);
+      },
+
+      search(e) {
+        this.searchData = e.detail.value;
+        this.rLocation();
+      }
+    }
+
+    onLoad() {
+      // let aasdfa = await wepy.getSystemInfo();
+      // console.log(this.SystemInfo);
+      this.rWeather();
+    }
+
+    rWeather(location) {
+      let strLocation = location ? `${location.lng},${location.lat}` : null;
+      BMap.weather({
+        location: strLocation || null,
+        success: (res) => {
+          console.log('success', res);
+        },
+        fail: (res) => {
+          console.log('fail', res);
+        }
+      })
+    }
+
+    rLocation() {
+      
+      BMap.suggestion({
+        query: this.searchData,
+        success: (res) => {
+          const location = res.result[0] && res.result[0].location || null;
+          this.rWeather(location);
+        },
+        fail: (res) => {
+          console.log('fail', res);
+        }
+      })
+    }
+
+  }
+</script>

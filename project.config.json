@@ -11,5 +11,27 @@
 	"appid": "wx38c2b93884cce8c6",
 	"projectname": "mytestaa",
 	"miniprogramRoot": "./dist",
-	"condition": {}
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": -1,
+					"name": "sp",
+					"pathName": "pages/shopping"
+				}
+			]
+		}
+	}
 }

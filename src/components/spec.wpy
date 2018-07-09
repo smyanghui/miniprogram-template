@@ -1,0 +1,55 @@
+<style type="less">
+  .groupBox {
+    /*position: fixed; top: 0; left: 0; z-index: 9; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;*/
+  }
+  .groupBody {
+    width: 80%; background-color: #ccc;
+  }
+  .groupFooter {
+    width: 100%; text-align: center;
+    color: #777; text-shadow: 0 1px 0 #fff;
+    font-size: 18px;
+    &:after { content: '×'; }
+  }
+</style>
+
+<template>
+  <view wx:if="{{visiable}}" class="groupBox" @tap="nspec">
+    <view class="groupBody">asdfasdf</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Group extends wepy.component {
+
+    data = {
+    }
+
+    props = {
+      visiable: {
+        type: Boolean,
+        default: false,
+        twoWay: true,
+      },
+    }
+
+    events = {
+      aanspec: (id) => {
+        this.visiable = false;
+      },
+
+    }
+
+    methods = {
+      tap() {
+      },
+
+      nspec() {
+        this.visiable = false;
+      },
+    }
+  }
+</script>

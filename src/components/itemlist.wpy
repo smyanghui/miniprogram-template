@@ -22,7 +22,7 @@
       font-size: 18px; color: #f60;
       text { font-size: 12px;}
     }
-    .choiceRight {
+    /*.choiceRight {
       float: right; width: 50%; text-align: right;
       .iconfont, .num { display: inline-block; font-size: 16px;}
       .num { padding: 0 5px;}
@@ -34,30 +34,34 @@
         padding: 0 12px; display: inline-block; font-size: 14px;
         border-radius: 24px; background-color: #59D178; color: #fff;
       }
-    }
+    }*/
   }
 }
 </style>
 
 <template>
 
-  <view class="itemList">
-    <view class="imgBox">
-      <image src="{{item.imgUrl}}"></image>
-    </view>
-    <view class="txtBox">
-      <view class="name">{{item.itemName}}</view>
-      <view class="remark">{{item.remark}}</view>
-      <view class="choiceBox">
-        <view class="price"><text>￥</text>{{item.price}}</view>
-        <view class="choiceRight">
-          <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
-          <text class="num">{{item.cNum}}</text>
-          <text class="iconfont icon-add" @tap="add"></text>
+  <block wx:for="{{items}}" wx:for-index="key" wx:for-item="item" wx:key="index">
+
+    <view class="itemList">
+      <view class="imgBox">
+        <image src="{{item.imgUrl}}"></image>
+      </view>
+      <view class="txtBox">
+        <view class="name">{{item.itemName}}</view>
+        <view class="remark">{{item.remark}}</view>
+        <view class="choiceBox">
+          <view class="price"><text>￥</text>{{item.price}}</view>
+          <view class="choiceRight">
+            <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
+            <text class="num">{{item.cNum}}</text>
+            <text class="iconfont icon-add" @tap="add({{item.itemId}})"></text>
+          </view>
         </view>
       </view>
     </view>
-  </view>
+
+  </block>
 
 </template>
 
@@ -75,9 +79,9 @@
     }
 
     props = {
-      item: {
-        type: String,
-        default: [],
+      items: {
+        type: Object,
+        default: {},
       },
     }
 
@@ -85,19 +89,30 @@
 
       // 减商品
       minus(id) {
-        const num = this.item.cNum;
+        const num = this.items.cNum;
         if (num === 0) return;
-        this.item.cNum = num - 1;
-        // console.log(id, this.item);
+        this.items.cNum = num - 1;
+        // console.log(id, this.items);
       },
 
       // 加商品
-      add() {
-        const num = this.item.cNum;
+      add(id) {
+        console.log(id, this.items);
+        let sitem = this.wlist(id);
+        const num = sitem.cNum;
         if (num === 99) return;
-        this.item.cNum = num + 1;
+        sitem.cNum = num + 1;
+        this.$invoke('../Spec', 'aanspec', '123');
       }
 
+    }
+
+    // 获取到对应商品
+    wlist(id) {
+      for (let i in this.items) {
+        let sitem = this.items[i];
+        if (sitem.itemId == id) return sitem;
+      }
     }
 
     onLoad () {

@@ -1,5 +1,8 @@
 <style lang="less">
 @import './css/iconfont.less';
+page {
+  font-smoothing: antialiased; /*抗锯齿*/
+}
 .container {
   height: 100%;
   box-sizing: border-box;
@@ -14,7 +17,9 @@ import 'wepy-async-function'
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index'
+      'pages/index',
+      'pages/shopping',
+      'pages/weather'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -25,7 +30,7 @@ export default class extends wepy.app {
   }
 
   globalData = {
-    userInfo: null
+    userInfo: null,
   }
 
   constructor () {
@@ -51,13 +56,12 @@ export default class extends wepy.app {
   }
 
   getUserInfo(cb) {
-    const that = this
     if (this.globalData.userInfo) {
       return this.globalData.userInfo
     }
     wepy.getUserInfo({
       success (res) {
-        that.globalData.userInfo = res.userInfo
+        this.globalData.userInfo = res.userInfo
         cb && cb(res.userInfo)
       }
     })
