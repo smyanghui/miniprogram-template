@@ -1,29 +1,58 @@
 <style type="less">
-  .groupBox {
-    /*position: fixed; top: 0; left: 0; z-index: 9; width: 100%; height: 100%;
-    display: flex; justify-content: center; align-items: center;*/
+  .mask {
+    position: fixed; top: 0; left: 0; z-index: 9; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.5);
   }
-  .groupBody {
-    width: 80%; background-color: #ccc;
+  .specBox {
+    width: 80%; background-color: #fff; border-radius: 5px;
+    box-shadow: 0 0 10px #ccc;
   }
-  .groupFooter {
-    width: 100%; text-align: center;
-    color: #777; text-shadow: 0 1px 0 #fff;
-    font-size: 18px;
-    &:after { content: '×'; }
+  .specTitle {
+  }
+  .specBody {
+    padding: 10px 20px;
+    >view { margin-bottom: 10px;}
+    text {
+      display: inline-block; border-radius: 30px; color: #666;
+      border: 1px solid #666; margin-right: 10px; margin-bottom: 10px; padding: 5px 15px;
+      &.cur { border-color: #59D178; color: #59D178;}
+    }
+  }
+  .specFooter {
+    display: flex; border-top: 1rpx solid #ccc; text-align: center;
+    /*text-shadow: 0 1px 0 #fff;*/
+    /*&:after { content: '×'; }*/
+    .cancel, .sure { padding: 10px 0; width: 50%; }
+    .sure { color: #59D178; border-left: 1rpx solid #ccc; }
   }
 </style>
 
 <template>
-  <view wx:if="{{visiable}}" class="groupBox" @tap="nspec">
-    <view class="groupBody">asdfasdf</view>
+  <view class="mask" wx:if="{{visiable}}">
+    <view class="specBox">
+      <view class="specTitle">{{itemspec.itemName}}</view>
+      <view class="specBody">
+        <block wx:for="{{itemspec.spec}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+          <view>{{item.spec_group_name}}</view>
+          <view>
+            <block wx:for="{{item.spec_group_list}}" wx:for-index="indexa" wx:for-item="itema" wx:key="indexa">
+              <text class="{{itema.is_select ? 'cur' : ''}}" @tap="selectSpec({{item.spec_group_id}}, {{itema.spec_id}})">{{itema.spec_name}}</text>
+            </block>
+          </view>
+        </block>
+      </view>
+      <view class="specFooter">
+        <view class="cancel" @tap="cancelSpec">取消</view>
+        <view class="sure">确定</view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
 
-  export default class Group extends wepy.component {
+  export default class Spec extends wepy.component {
 
     data = {
     }
@@ -34,22 +63,35 @@
         default: false,
         twoWay: true,
       },
-    }
-
-    events = {
-      aanspec: (id) => {
-        this.visiable = false;
-      },
-
+      itemspec: {
+        type: Object,
+        default: {},
+        // twoWay: true,
+      }
     }
 
     methods = {
-      tap() {
+      selectSpec(gid, sid) {
+        for (let i in this.itemspec.spec) {
+          let group = this.itemspec.spec[i];
+          if (gid != group.spec_group_id) continue;
+          for (let j in group.spec_group_list) {
+            let list = group.spec_group_list[j];
+            list.is_select = list.spec_id == sid;
+          }
+        }
       },
 
-      nspec() {
+      cancelSpec() {
         this.visiable = false;
       },
     }
+
+    watch = {
+      // itemspec(val) {
+      //   console.log(val);
+      // }
+    }
+
   }
 </script>

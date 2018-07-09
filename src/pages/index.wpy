@@ -73,7 +73,29 @@
       },
     }
 
-    onLoad() {
+    onLoad(options) {
+      console.log(123, options);
+
+
+      // wx.chooseAddress({
+      //   success: function (res) {
+      //     console.log(res);
+      //   }
+      // })
+
+      wx.login({
+        success: function (data) {
+          console.log(data);
+          wx.getUserInfo({
+                success: function (userinfo) {
+                  console.log(userinfo);
+                },
+                fail: function(res) {
+                  console.log(res);
+                }
+            });
+        }
+      })
       // let aasdfa = await wepy.getSystemInfo();
       // console.log(this.SystemInfo);
     }

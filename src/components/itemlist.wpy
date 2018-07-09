@@ -22,7 +22,7 @@
       font-size: 18px; color: #f60;
       text { font-size: 12px;}
     }
-    /*.choiceRight {
+    .choiceRight {
       float: right; width: 50%; text-align: right;
       .iconfont, .num { display: inline-block; font-size: 16px;}
       .num { padding: 0 5px;}
@@ -34,7 +34,7 @@
         padding: 0 12px; display: inline-block; font-size: 14px;
         border-radius: 24px; background-color: #59D178; color: #fff;
       }
-    }*/
+    }
   }
 }
 </style>
@@ -53,9 +53,12 @@
         <view class="choiceBox">
           <view class="price"><text>￥</text>{{item.price}}</view>
           <view class="choiceRight">
-            <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
-            <text class="num">{{item.cNum}}</text>
-            <text class="iconfont icon-add" @tap="add({{item.itemId}})"></text>
+            <text wx:if="item.isSpec == 1" class="choiceBtn" @tap="cspec({{item.itemId}})">选择规格</text>
+            <block wx:else>
+              <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
+              <text class="num">{{item.cNum}}</text>
+              <text class="iconfont icon-add" @tap="add({{item.itemId}})"></text>
+            </block>
           </view>
         </view>
       </view>
@@ -89,30 +92,39 @@
 
       // 减商品
       minus(id) {
-        const num = this.items.cNum;
+        let curItem = this.wlist(id);
+        const num = curItem.cNum;
         if (num === 0) return;
-        this.items.cNum = num - 1;
-        // console.log(id, this.items);
+        curItem.cNum = num - 1;
       },
 
       // 加商品
       add(id) {
-        console.log(id, this.items);
-        let sitem = this.wlist(id);
-        const num = sitem.cNum;
+        let curItem = this.wlist(id);
+        const num = curItem.cNum;
         if (num === 99) return;
-        sitem.cNum = num + 1;
-        this.$invoke('../Spec', 'aanspec', '123');
-      }
+        curItem.cNum = num + 1;
+      },
+
+      // 选规格
+      cspec(id) {
+        let curItem = this.wlist(id);
+        this.$emit('openSpec', curItem);
+      },
 
     }
 
-    // 获取到对应商品
+    // 获取对应商品
     wlist(id) {
+      let curItem = {};
       for (let i in this.items) {
-        let sitem = this.items[i];
-        if (sitem.itemId == id) return sitem;
+        let ii = this.items[i];
+        if (ii.itemId == id) {
+          curItem = ii;
+          break;
+        }
       }
+      return curItem;
     }
 
     onLoad () {

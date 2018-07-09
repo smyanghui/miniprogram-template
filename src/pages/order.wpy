@@ -1,71 +1,57 @@
 <style lang="less">
-.outBox {
-  width: 100%; height: 100%; display: flex;
-  .leftBox { width: 200rpx;}
-  .rightBox { flex: 1; }
+.outBox {}
+
+.orderList {
+  padding: 10rpx; border-bottom: 1rpx solid #eee;
+  line-height: 27px;
+  .oTit { display: inline-block; width: 80px; color: #666;}
+  .price { color: #c8441a;}
+  .end { color: #22c81a;}
+  .error { color: #999;}
 }
-.sTit { text-align: center; padding: 5px 0; }
 </style>
 
 <template>
+
   <view class="outBox">
-    <view class="leftBox">
-      <scroll-view scroll-y scroll-with-animation bindscroll="scroll" scroll-into-view="{{sorftPos}}" style="height: {{SystemInfo.windowHeight}}px;">
-        <view class="sTit" @tap="buy">asdfa</view>
-        <view class="sTit" @tap="cspec">adfa发d</view>
-      </scroll-view>
-    </view>
-    <view class="rightBox">
-      <scroll-view scroll-y scroll-with-animation bindscroll="scroll" scroll-into-view="{{itemPos}}" style="height: {{SystemInfo.windowHeight}}px;">
-
-        <!-- <block wx:for="{{allItems}}" wx:for-index="key" wx:for-item="items">
-          <view>{{cate[key].name}}</view>
-          <repeat for="{{items}}" index="index" item="sitem">
-            <itemlist :item="sitem"></itemlist>
-          </repeat>
-        </block> -->
-
-        <repeat for="{{allItems}}" index="index" item="items">
-          <view>{{cate[index].name}}</view>
-          <itemlist :items="items"></itemlist>
-        </repeat>
-
-      </scroll-view>
-    </view>
+    
+    <block wx:for="{{orderList}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+      <view class="orderList">
+        <view>
+          <text class="oTit">订单号：</text>D12389797123123113
+        </view>
+        <view>
+          <text class="oTit">订单状态：</text><text class="end">订单已完成</text>
+        </view>
+        <view>
+          <text class="oTit">下单时间：</text>2018-05-01 12:01:01
+        </view>
+        <view>
+          <text class="oTit">提货时间：</text>2018-05-01 13:01:01
+        </view>
+        <view>
+          <text class="oTit">结算金额：</text><text class="price">￥102.00</text>
+        </view>
+      </view>
+    </block>
   </view>
-
-  <spec :visiable.sync="visiablespec" :itemspec.sync="itemspec"></spec>
 
 </template>
 
 <script>
   import wepy from 'wepy';
   import common from '../mixins/common';
-  import Itemlist from '../components/itemlist';
-  import Spec from '../components/spec';
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: 'test1231'
+      navigationBarTitleText: '订单列表'
     };
 
     data = {
-      sorftPos: "",
-      items: [],
-      list: {},
-      cate: {},
-      allItems: {},
-      item: {},
-      visiablespec: false,
-      itemspec: {},
+      orderList: [],
     };
 
     mixins = [common];
-
-    components = {
-      itemlist: Itemlist,
-      spec: Spec,
-    }
 
     events = {
       openSpec: (item) => {
@@ -79,18 +65,10 @@
         // console.log(123, this.allItems);
         // this.$invoke('spec', 'aanspec', '123');
       },
-
-      cspec() {
-        this.visiablespec = true;
-      },
     }
 
     onLoad() {
-
-      // let aasdfa = await wepy.getSystemInfo();
-      // console.log(this.SystemInfo);
       this.rItems();
-
     }
 
     rData() {
