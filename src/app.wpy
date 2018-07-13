@@ -19,15 +19,28 @@ export default class extends wepy.app {
     pages: [
       'pages/index',
       'pages/shopping',
-      'pages/weather',
       'pages/cart',
-      'pages/order'
+      'pages/my',
+      'pages/my/order',
+      'pages/my/weather'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      list: [{
+        pagePath: 'pages/shopping',
+        text: '商品'
+      }, {
+        pagePath: 'pages/cart',
+        text: '购物车'
+      }, {
+        pagePath: 'pages/my',
+        text: '我的'
+      }]
     }
   }
 

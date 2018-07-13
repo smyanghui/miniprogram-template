@@ -1,0 +1,86 @@
+<style lang="less">
+.outBox {}
+
+.orderList {
+  padding: 10rpx; border-bottom: 1rpx solid #eee;
+  line-height: 27px;
+  .oTit { display: inline-block; width: 80px; color: #666;}
+  .price { color: #c8441a;}
+  .end { color: #22c81a;}
+  .error { color: #999;}
+}
+</style>
+
+<template>
+
+  <view class="outBox">
+    
+    <block wx:for="{{orderList}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+      <view class="orderList">
+        <view>
+          <text class="oTit">订单号：</text>D12389797123123113
+        </view>
+        <view>
+          <text class="oTit">订单状态：</text><text class="end">订单已完成</text>
+        </view>
+        <view>
+          <text class="oTit">下单时间：</text>2018-05-01 12:01:01
+        </view>
+        <view>
+          <text class="oTit">提货时间：</text>2018-05-01 13:01:01
+        </view>
+        <view>
+          <text class="oTit">结算金额：</text><text class="price">￥102.00</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import common from '../../mixins/common';
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '订单列表'
+    };
+
+    data = {
+      orderList: [],
+    };
+
+    mixins = [common];
+
+    methods = {
+      buy() {
+        // console.log(123, this.allItems);
+        // this.$invoke('spec', 'aanspec', '123');
+      },
+    }
+
+    onLoad() {
+      this.rItems();
+    }
+
+    rData() {
+      const aa = 123;
+      return {"code":0}
+    }
+
+    // 获取商品
+    rItems() {
+
+      // wx.request({
+      //   url: 'https://devapi.nfangbian.com/index/goods',
+      //   success: function (data) {
+      //       console.log(data);
+      //   }
+      // });
+
+
+    }
+
+  }
+</script>

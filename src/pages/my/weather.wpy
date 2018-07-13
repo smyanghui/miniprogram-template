@@ -1,0 +1,133 @@
+<style lang="less">
+.outBox {}
+.addressMap { width: 100%;}
+
+</style>
+
+<template>
+  <view wx:if="{{ready}}" class="outBox">
+
+    <input placeholder="输入要地址" value="{{searchData}}" @blur="search" />
+
+  </view>
+
+  <map class="addressMap" longitude="{{longitude}}" latitude="{{latitude}}" markers="{{markers}}"></map>
+
+  <input placeholder="输入要地址" value="{{address}}" />
+  <view @tap="chooseAdress">选择地址</view>
+
+
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import common from '../../mixins/common';
+  import bmap from '../../utils/bmap-wx.min.js';
+
+  const BMap = new bmap.BMapWX({ ak: 'dQWhRZdi0U8hDE9YaYGoIvPBmvNeYGIV' });
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'test1231'
+    };
+
+    data = {
+      sorftPos: "",
+      searchData: '上海',
+      weatherData: {},
+      markers: [],
+      latitude: '',
+      longitude: '',
+      address: '',
+    };
+
+    mixins = [common];
+
+    components = {
+    }
+
+    methods = {
+      buy() {
+        // console.log(123, this.allItems);
+      },
+
+      search(e) {
+        this.searchData = e.detail.value;
+        this.rLocation();
+      },
+
+      chooseAdress() {
+        wx.chooseLocation({
+          success: (res) => {
+            console.log(res);
+            this.latitude = res.latitude;
+            this.longitude = res.longitude;
+            this.markers = [{
+              id: 1,
+              alpha: 1,
+              address: res.address,
+              title: res.name,
+              latitude: res.latitude,
+              longitude: res.longitude,
+              iconPath: undefined,
+              iconTapPath: undefined,
+            }];
+            this.address = res.address;
+            this.$apply();
+          },
+          fail: (res) => {
+            console.log('fail', res);
+          }
+        })
+      }
+    }
+
+    onLoad() {
+      // this.rWeather();
+      this.iniMap();
+      
+    }
+
+    rWeather(location) {
+      let strLocation = location ? `${location.lng},${location.lat}` : null;
+      BMap.weather({
+        location: strLocation || null,
+        success: (res) => {
+          console.log('success', res);
+        },
+        fail: (res) => {
+          console.log('fail', res);
+        }
+      })
+    }
+
+    rLocation() {
+      BMap.suggestion({
+        query: this.searchData,
+        success: (res) => {
+          const location = res.result[0] && res.result[0].location || null;
+          this.rWeather(location);
+        },
+        fail: (res) => {
+          console.log('fail', res);
+        }
+      })
+    }
+
+    iniMap() {
+      BMap.regeocoding({ 
+        success: (res) => {
+          const wxMarkerData = res.wxMarkerData;
+          this.markers = wxMarkerData;
+          this.latitude = wxMarkerData[0].latitude;
+          this.longitude = wxMarkerData[0].longitude;
+          this.address = wxMarkerData[0].address;
+          this.$apply();
+        },
+        fail: (res) => {
+          console.log('fail', res);
+        }
+      })
+    }
+
+  }
+</script>

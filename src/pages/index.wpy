@@ -22,27 +22,26 @@
 <template>
   <view wx:if="{{ready}}" class="outBox">
 
-    <swiper indicator-dots autoplay circular>
+    <!-- <swiper indicator-dots autoplay circular>
       <swiper-item class="banner">
         <image src="../img/banner.jpg"></image>
       </swiper-item>
       <swiper-item class="banner">
         <image src="../img/banner.jpg"></image>
       </swiper-item>
-    </swiper>
+    </swiper> -->
 
     <view class="wrap clearfix">
-      <navigator class="wrap01" url="./shopping" hover-class="none">aa</navigator>
-      <navigator class="wrap02" url="./weather" hover-class="none">bb</navigator>
-      <!-- <view class="wrap02">天气</view>
-      <view class="wrap03">九宫格</view>
-      <view class="wrap04">九宫格</view>
-      <view class="wrap05">九宫格</view>
-      <view class="wrap06">九宫格</view>
-      <view class="wrap07">九宫格</view>
-      <view class="wrap08">九宫格</view>
-      <view class="wrap09">九宫格</view> -->
+      <navigator class="wrap01" url="./shopping" open-type="switchTab" hover-class="none">aa</navigator>
+      <navigator class="wrap02" url="./my" open-type="switchTab" hover-class="none">bb</navigator>
+      <navigator class="wrap03" url="./cart" open-type="switchTab" hover-class="none">cc</navigator>
+      <navigator class="wrap04" url="./my/order" hover-class="none">dd</navigator>
     </view>
+    <button open-type="getUserInfo" @getuserinfo="getuserinfo">获取用户信息</button>
+
+    <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号一键登录</button>
+
+    <button @tap="getAddress">获取选择收货地址</button>
 
   </view>
 </template>
@@ -50,10 +49,11 @@
 <script>
   import wepy from 'wepy';
   import common from '../mixins/common';
+  import { itemsData } from '../utils/idata.js';
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: 'test1231'
+      navigationBarTitleText: '首页'
     };
 
     data = {
@@ -71,33 +71,38 @@
       buy() {
         // console.log(123, this.allItems);
       },
+      getPhoneNumber(e) { 
+        console.log(e);
+      },
+      getAddress() {
+        wx.chooseAddress({
+          success: function (res) {
+            console.log(res);
+          }
+        })
+      },
+      getuserinfo(e) {
+        console.log(e);
+      },
     }
 
     onLoad(options) {
       console.log(123, options);
 
-
-      // wx.chooseAddress({
-      //   success: function (res) {
-      //     console.log(res);
+      // wx.login({
+      //   success: function (data) {
+      //     console.log(456, data);
+      //     wx.getUserInfo({
+      //           success: function (userinfo) {
+      //             console.log(789, userinfo);
+      //           },
+      //           fail: function(res) {
+      //             console.log(11, res);
+      //           }
+      //       });
       //   }
       // })
 
-      wx.login({
-        success: function (data) {
-          console.log(data);
-          wx.getUserInfo({
-                success: function (userinfo) {
-                  console.log(userinfo);
-                },
-                fail: function(res) {
-                  console.log(res);
-                }
-            });
-        }
-      })
-      // let aasdfa = await wepy.getSystemInfo();
-      // console.log(this.SystemInfo);
     }
 
   }
