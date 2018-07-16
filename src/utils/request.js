@@ -1,38 +1,34 @@
 import wepy from 'wepy';
 
-function requestBase(params = {}) {
-
-  const { url, method = 'get', data, success, fail, complete, options = {} } = params;
-
-  const _url = `api/aa/${url}`;
-
-  wx.request({
-    url: _url,
+function request(params = {}) {
+  const { url, method = 'get', data, success, fail, complete } = params;
+  wepy.request({
+    url: `https://devapi.nfangbian.com${url}`,
     method,
     data,
-    header,
     success(res) {
       console.log(res);
+      if (res.code > 0) {
+        wx.showModal({
+          showCancel: false,
+          content: res.message,
+        });
+        return;
+      }
+      success && success(res);
     },
     fail(res) {
-      console.log(res);
+      wx.showModal({
+        showCancel: false,
+        content: '网络异常，请稍后再试',
+      });
+      fail && fail();
     },
     complete() {
-      typeof complete === 'function' && complete();
+      complete && complete();
     },
   });
 
-}
-
-function request(url, method, data, success, fail, options) {
-  requestBase({
-    url,
-    method,
-    data,
-    success,
-    fail,
-    options,
-  });
 }
 
 export default request;

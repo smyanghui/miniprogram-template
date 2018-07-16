@@ -4,15 +4,15 @@
   .leftBox { width: 200rpx;}
   .rightBox { flex: 1; }
 }
-.sTit { text-align: center; padding: 5px 0; }
+.sTit { text-align: center; padding: 10px; font-size: 14px; border-bottom: 1rpx solid #ccc; }
+.cateTit { font-size: 12px; background-color: #fafafa; padding: 5px; }
 </style>
 
 <template>
   <view class="outBox">
     <view class="leftBox">
       <scroll-view scroll-y scroll-with-animation bindscroll="scroll" scroll-into-view="{{sorftPos}}" style="height: {{SystemInfo.windowHeight}}px;">
-        <view class="sTit" @tap="buy">asdfa</view>
-        <view class="sTit" @tap="cspec">adfa发d</view>
+        <view wx:for="{{cate}}" wx:key="index" class="sTit">{{item.name}}</view>
       </scroll-view>
     </view>
     <view class="rightBox">
@@ -26,7 +26,7 @@
         </block> -->
 
         <repeat for="{{allItems}}" index="index" item="items">
-          <view>{{cate[index].name}}</view>
+          <view class="cateTit">{{cate[index].name}}</view>
           <itemlist :items="items"></itemlist>
         </repeat>
 
@@ -43,6 +43,7 @@
   import common from '../mixins/common';
   import Itemlist from '../components/itemlist';
   import Spec from '../components/spec';
+  import { itemsData } from '../utils/idata.js';
 
   export default class Index extends wepy.page {
     config = {
@@ -93,11 +94,6 @@
 
     }
 
-    rData() {
-      const aa = 123;
-      return {"code":0,"msg":"OK","data":{"goods":[{"category_id":3,"category_name":"面包","items":[{"id":10,"goods_name":"玉米调理面包","goods_ad":"","goods_logo":"sdfad","category_id":3,"goods_order":10000,"goods_price":1000,"goods_mprice":1500,"goods_freight":0,"is_limit":0,"is_spec":1,"goods_point":0,"goods_num":0,"goods_sellnum":0,"goods_collectnum":0,"goods_commentnum":0,"goods_status":1,"status":1,"created_at":0,"updated_at":0,"deleted_at":0,"spec_group_info":[{"spec_group_id":11,"spec_group_name":"尺寸","spec_group_beizhu":"蛋糕尺寸","spec_group_list":[{"spec_id":"12","spec_name":"6寸"},{"spec_id":"14","spec_name":"10寸"}]},{"spec_group_id":25,"spec_group_name":"温度","spec_group_beizhu":"","spec_group_list":[{"spec_id":"26","spec_name":"常温"},{"spec_id":"27","spec_name":"加热"}]}],"goods_skuid":[{"skuid":8,"goods_price":1800,"goods_mprice":1900,"is_limit":0,"goods_num":0,"goods_sellnum":0,"spec_ids":"26,12","spec_ids_ary":["26","12"],"spec_info":[{"spec_id":"26","spec_name":"常温","spec_pid":25},{"spec_id":"12","spec_name":"6寸","spec_pid":11}]},{"skuid":9,"goods_price":1850,"goods_mprice":1900,"is_limit":0,"goods_num":0,"goods_sellnum":0,"spec_ids":"27,14","spec_ids_ary":["27","14"],"spec_info":[{"spec_id":"27","spec_name":"加热","spec_pid":25},{"spec_id":"14","spec_name":"10寸","spec_pid":11}]}]},]}]}}
-    }
-
     // 格式化数据
     formatItems(listArr) {
       let cate = {};
@@ -145,7 +141,7 @@
       //   }
       // });
 
-      const origiData = this.rData();
+      const origiData = itemsData;
 
       const itemData = this.formatItems(origiData.data.goods);
       console.log(itemData);
@@ -153,29 +149,10 @@
       this.cate = itemData.cate;
       this.allItems = itemData.allItems;
 
-      // setTimeout(() => {
-      //   this.list = [{
-      //     itemId: 1,
-      //     imgSrc: 'adfaa',
-      //     itemName: '大乐山大佛卡戴珊饭卡上放大镜打发按时发打发萨达',
-      //     remark: 'adfa',
-      //     price: '123.00',
-      //     cNum: 2,
-      //   }, {
-      //     itemId: 2,
-      //     imgSrc: 'adsfa',
-      //     itemName: '时发打发萨达',
-      //     remark: 'adfa',
-      //     price: '100.00',
-      //     cNum: 5,
-      //   }];
-      //   this.$apply();
-      // }, 1000);
-
     }
 
     scroll(e) {
-        console.log(e)
+      // console.log(e)
     }
   }
 </script>

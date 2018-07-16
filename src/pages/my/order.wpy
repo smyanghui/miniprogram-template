@@ -41,6 +41,7 @@
 <script>
   import wepy from 'wepy';
   import common from '../../mixins/common';
+  import request from '../../utils/request';
 
   export default class Index extends wepy.page {
     config = {
@@ -54,32 +55,21 @@
     mixins = [common];
 
     methods = {
-      buy() {
-        // console.log(123, this.allItems);
-        // this.$invoke('spec', 'aanspec', '123');
-      },
+      // buy() {},
     }
 
     onLoad() {
-      this.rItems();
+      this.rOrder();
     }
 
-    rData() {
-      const aa = 123;
-      return {"code":0}
-    }
-
-    // 获取商品
-    rItems() {
-
-      // wx.request({
-      //   url: 'https://devapi.nfangbian.com/index/goods',
-      //   success: function (data) {
-      //       console.log(data);
-      //   }
-      // });
-
-
+    // 获取订单列表
+    rOrder() {
+      request({
+        url: '/order/list',
+        success: (res) => {
+          //aa
+        }
+      })
     }
 
   }

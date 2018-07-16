@@ -49,7 +49,6 @@
 <script>
   import wepy from 'wepy';
   import common from '../mixins/common';
-  import { itemsData } from '../utils/idata.js';
 
   export default class Index extends wepy.page {
     config = {

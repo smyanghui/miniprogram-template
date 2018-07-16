@@ -1,6 +1,6 @@
 <style lang="less">
 .itemList {
-  height: 200rpx; padding: 10rpx; border-bottom: 1rpx solid #eee;
+  height: 180rpx; padding: 10rpx; border-bottom: 1rpx solid #eee;
   .imgBox {
     float: left; width: 200rpx;
     image { width: 180rpx; height: 180rpx; display: block;}
@@ -8,11 +8,11 @@
   .txtBox {
     float: right; width: 330rpx;
     .name {
-      font-size: 16px; height: 24px;
+      font-size: 14px; height: 24px;
       text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
     }
     .remark {
-      font-size: 12px; color: #666; height: 28px; line-height: 14px; overflow: hidden;
+      font-size: 10px; color: #666; height: 28px; line-height: 14px; overflow: hidden;
     }
   }
   .choiceBox {
@@ -53,7 +53,7 @@
         <view class="choiceBox">
           <view class="price"><text>￥</text>{{item.price}}</view>
           <view class="choiceRight">
-            <text wx:if="item.isSpec == 1" class="choiceBtn" @tap="cspec({{item.itemId}})">选择规格</text>
+            <text wx:if="{{item.isSpec == 1}}" class="choiceBtn" @tap="cspec({{item.itemId}})">选择规格</text>
             <block wx:else>
               <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
               <text class="num">{{item.cNum}}</text>
@@ -70,6 +70,7 @@
 
 <script>
   import wepy from 'wepy'
+  import request from '../utils/request';
 
   export default class List extends wepy.component {
     data = {
@@ -103,6 +104,7 @@
         let curItem = this.wlist(id);
         const num = curItem.cNum;
         if (num === 99) return;
+        this.doAdd(curItem);
         curItem.cNum = num + 1;
       },
 
@@ -112,6 +114,23 @@
         this.$emit('openSpec', curItem);
       },
 
+    }
+
+    // 加入购物车
+    doAdd() {
+      let params = {
+        token: '',
+        goods_id: '',
+        spec_ids: '',
+        cart_num: ''
+      }
+      request({
+        url: 'cart/add',
+        data: params,
+        success: function (data) {
+          console.log(data);
+        }
+      });
     }
 
     // 获取对应商品
@@ -129,5 +148,6 @@
 
     onLoad () {
     }
+
   }
 </script>

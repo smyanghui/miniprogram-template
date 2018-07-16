@@ -49,14 +49,51 @@
         <view class="remark">{{item.remark}}</view>
         <view class="choiceBox">
           <view class="price"><text>￥</text>{{item.price}}</view>
-          <view class="choiceRight">
-            <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
-            <text class="num">{{item.cNum}}</text>
-            <text class="iconfont icon-add" @tap="add({{item.itemId}})"></text>
-          </view>
         </view>
       </view>
     </view>
+
+    <view class="formBox">
+      <view class="cList">
+        <view class="cTit">支付方式</view>
+        <view class="cCon">
+          <picker mode="selector" value="{{payIndex}}" range="{{payArr}}" range-key="name"></picker>
+        </view>
+      </view>
+      <view class="cList">
+        <view class="cTit">配送方式</view>
+        <view class="cCon">
+          <picker mode="selector" value="{{payIndex}}" range="{{payArr}}" range-key="name"></picker>
+        </view>
+      </view>
+      <view class="cList">
+        <view class="cTit">收货人姓名</view>
+        <view class="cCon">
+          <input value="{{weight}}" type="number" placeholder-class="no-input" />
+        </view>
+      </view>
+      <view class="cList">
+        <view class="cTit">收货人电话</view>
+        <view class="cCon">
+          <input value="{{weight}}" type="number" placeholder-class="no-input" />
+        </view>
+      </view>
+      <view class="cList">
+        <view class="cTit">收货地址</view>
+        <view class="cCon">
+          <input value="{{weight}}" type="number" placeholder-class="no-input" />
+        </view>
+      </view>
+      <view class="cList">
+        <view class="cTit">备注</view>
+        <view class="cCon">
+          <input value="{{weight}}" type="number" placeholder-class="no-input" />
+        </view>
+      </view>
+
+      <button>订单提交</button>
+    </view>
+
   </view>
 
 </template>
@@ -68,11 +105,16 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '购物车'
+      navigationBarTitleText: '订单确认'
     };
 
     data = {
       items: [],
+      payArr: [
+        { code: 1, value: '微信支付' },
+        { code: 2, value: '货到付款' },
+      ],
+      payIndex: 1,
     };
 
     mixins = [common];
