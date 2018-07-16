@@ -13,34 +13,35 @@ page {
 import wepy from 'wepy'
 import 'wepy-async-function'
 
-
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index',
-      'pages/shopping',
-      'pages/cart',
-      'pages/my',
-      'pages/my/order',
-      'pages/my/weather'
+      'pages/nav',
+      'pages/nav/joke'
+      // 'pages/index',
+      // 'pages/shopping',
+      // 'pages/cart',
+      // 'pages/my',
+      // 'pages/my/order',
+      // 'pages/my/weather'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
-    },
-    tabBar: {
-      list: [{
-        pagePath: 'pages/shopping',
-        text: '商品'
-      }, {
-        pagePath: 'pages/cart',
-        text: '购物车'
-      }, {
-        pagePath: 'pages/my',
-        text: '我的'
-      }]
+    // },
+    // tabBar: {
+    //   list: [{
+    //     pagePath: 'pages/shopping',
+    //     text: '商品'
+    //   }, {
+    //     pagePath: 'pages/cart',
+    //     text: '购物车'
+    //   }, {
+    //     pagePath: 'pages/my',
+    //     text: '我的'
+    //   }]
     }
   }
 

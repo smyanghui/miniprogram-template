@@ -1,0 +1,101 @@
+<style lang="less">
+.outBox {}
+
+.banner {
+  image { width: 100%; height: 150px; }
+}
+
+.wrap {
+  width: 100%; padding: 1%;
+  /*border-top: 1rpx solid #ccc;
+  > view, > navigator {
+    float: left; width: 250rpx; height: 250rpx;
+    box-sizing: border-box; border-bottom: 1rpx solid #ccc; text-align: center;
+  }
+  .wrap02, .wrap05, .wrap08 {
+    border-left: 1rpx solid #ccc; border-right: 1rpx solid #ccc;
+  }*/
+  > view {
+    float: left; width: 32.66%; height: 200rpx;
+    text-align: center; color: #fff; display: block;
+    border: 5rpx solid #fff; box-sizing: border-box;
+  }
+  navigator { display: block; width: 100%; height: 100%; }
+  text { display: block; }
+  .color_1 { background-color: #84d018; }
+  .color_2 { background-color: #f4b613; }
+  .color_3 { background-color: #fe864a; }
+  .color_4 { background-color: #747ae8; }
+  .color_5 { background-color: #ff6678; }
+  .color_6 { background-color: #0fc4d9; }
+  .color_7 { background-color: #fa6567; }
+  .color_8 { background-color: #92cf68; }
+  .color_9 { background-color: #58b5e1; }
+
+  .iconfont { font-size: 35px; margin-top: 15px; text-shadow: 1px 1px 1px #ddd; }
+  .nav_txt { font-size: 14px; margin-top: 10px; }
+}
+.clearfix:after { display: block; clear: both; content: " "; height: 0; overflow: hidden;}
+</style>
+
+<template>
+  <view class="outBox">
+
+    <swiper indicator-dots autoplay circular>
+      <swiper-item class="banner">
+        <image src="../img/banner.jpg"></image>
+      </swiper-item>
+    </swiper>
+
+    <view class="wrap clearfix">
+      <view class="color_1">
+        <navigator url="" hover-class="none">
+          <text class="iconfont icon-skip"></text>
+          <text class="nav_txt">小程序</text>
+        </navigator>
+      </view>
+      <view class="color_2">
+        <navigator url="./nav/joke" hover-class="none">
+          <text class="iconfont icon-time"></text>
+          <text class="nav_txt">计时</text>
+        </navigator>
+      </view>
+      <view class="color_3">
+        <navigator url="" hover-class="none">
+          <text class="iconfont icon-wxbzhanghu"></text>
+          <text class="nav_txt">个人中心</text>
+        </navigator>
+      </view>
+    </view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Nav extends wepy.page {
+    config = {
+      navigationBarTitleText: '导航'
+    };
+
+    data = {
+      sorftPos: "",
+    };
+
+
+    components = {
+    }
+
+    methods = {
+      buy() {
+        // console.log(123, this.allItems);
+      },
+    }
+
+    onLoad(options) {
+      console.log(123, options);
+    }
+
+  }
+</script>
