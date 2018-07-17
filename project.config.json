@@ -1,7 +1,7 @@
 {
 	"description": "aa",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": false,
 		"postcss": false,
 		"minified": false,
@@ -47,7 +47,7 @@
 				{
 					"id": 3,
 					"name": "nav",
-					"pathName": "pages/nav/joke",
+					"pathName": "pages/tool",
 					"query": ""
 				}
 			]

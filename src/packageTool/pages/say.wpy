@@ -1,0 +1,81 @@
+<style lang="less">
+.outBox { padding: 10px;}
+
+.search { border: 1px solid #ddd; border-radius: 5px; padding: 10px; margin-bottom: 10px;}
+.list {
+  border: 1px dashed #58b5e1; border-radius: 5px; margin-bottom: 10px;
+  padding: 10px; font-size: 14px; line-height: 24px;
+}
+</style>
+
+<template>
+  <view class="outBox">
+    <input class="search" placeholder="关键词" @blur="search" value="{{searchVal}}" />
+    <view class="list" wx:for="{{list}}" wx:key="index">{{item.famous_saying}}</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  let num = 1;
+  export default class Joke extends wepy.page {
+    config = {
+      navigationBarTitleText: '名人名言',
+      enablePullDownRefresh: true,
+    };
+
+    data = {
+      searchVal: '',
+      list: [],
+    };
+
+    components = {
+    }
+
+    methods = {
+      search(e) {
+        this.searchVal = e.detail.value;
+        this.rSay();
+      },
+    }
+
+    onLoad(options) {
+      this.rSay();
+    }
+
+    onPullDownRefresh() {
+      wx.showNavigationBarLoading();
+      this.rSay();
+    }
+
+    rSay() {
+      const keyword = this.searchVal || '毛泽东';
+      this.searchVal = keyword;
+      const AK = 'd63d7688fbc84d37a8b11d1382d32d70';
+      let params = { key: AK, keyword, page: num };
+      wx.request({
+        url: 'https://api.avatardata.cn/MingRenMingYan/LookUp',
+        data: params,
+        success: (data) => {
+          num++;
+          const res = data.data;
+          if (res.error_code > 0) {
+            wx.showModal({
+              showCancel: false,
+              content: res.reason,
+            });
+            return;
+          }
+          this.list = res.result;
+          this.$apply();
+        },
+        complete: () => {
+          wx.hideNavigationBarLoading();
+          wx.stopPullDownRefresh();
+        }
+      });
+    }
+
+  }
+</script>

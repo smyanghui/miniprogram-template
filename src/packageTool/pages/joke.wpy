@@ -1,0 +1,81 @@
+<style lang="less">
+.outBox { padding: 10px;}
+
+.list {
+  border: 1px dashed #58b5e1; border-radius: 5px; margin-bottom: 10px;
+  padding: 10px; font-size: 14px; line-height: 24px;
+}
+
+</style>
+
+<template>
+  <view class="outBox">
+
+    <view class="list" wx:for="{{list}}" wx:key="index">{{item.content}}</view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  let num = 1;
+  export default class Joke extends wepy.page {
+    config = {
+      navigationBarTitleText: '笑话',
+      enablePullDownRefresh: true,
+    };
+
+    data = {
+      list: [],
+    };
+
+    components = {
+    }
+
+    methods = {
+    }
+
+    onLoad(options) {
+      this.rJoke();
+    }
+
+    onPullDownRefresh() {
+      wx.showNavigationBarLoading();
+      this.rJoke();
+    }
+
+    rJoke() {
+      const AK = '3f6975cd95b241b1a18c1ddc19896bfd';
+      const curTime = Date.parse(new Date()) / 1000;
+      let params = {
+        key: AK,
+        time: curTime - 86400 * 10, // 10天前的数据
+        sort: 'asc',
+        page: num
+      };
+      wx.request({
+        url: 'https://api.avatardata.cn/Joke/QueryJokeByTime',
+        data: params,
+        success: (data) => {
+          num++;
+          const res = data.data;
+          if (res.error_code > 0) {
+            wx.showModal({
+              showCancel: false,
+              content: res.reason,
+            });
+            return;
+          }
+          this.list = res.result;
+          this.$apply();
+        },
+        complete: () => {
+          wx.hideNavigationBarLoading();
+          wx.stopPullDownRefresh();
+        }
+      });
+    }
+
+  }
+</script>

@@ -49,15 +49,15 @@
 
     <view class="wrap clearfix">
       <view class="color_1">
-        <navigator url="" hover-class="none">
+        <navigator url="../packageTool/pages/say" hover-class="none">
           <text class="iconfont icon-skip"></text>
-          <text class="nav_txt">小程序</text>
+          <text class="nav_txt">名人名言</text>
         </navigator>
       </view>
       <view class="color_2">
-        <navigator url="./nav/joke" hover-class="none">
+        <navigator url="../packageTool/pages/joke" hover-class="none">
           <text class="iconfont icon-time"></text>
-          <text class="nav_txt">计时</text>
+          <text class="nav_txt">笑话</text>
         </navigator>
       </view>
       <view class="color_3">
