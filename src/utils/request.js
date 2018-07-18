@@ -7,7 +7,6 @@ function request(params = {}) {
     method,
     data,
     success(res) {
-      console.log(res);
       if (res.code > 0) {
         wx.showModal({
           showCancel: false,
@@ -15,7 +14,7 @@ function request(params = {}) {
         });
         return;
       }
-      success && success(res);
+      success && success(res.data);
     },
     fail(res) {
       wx.showModal({

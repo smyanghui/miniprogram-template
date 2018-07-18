@@ -1,5 +1,5 @@
 <style lang="less">
-.itemList {
+.itemList_aaaa {
   height: 180rpx; padding: 10rpx; border-bottom: 1rpx solid #eee;
   .imgBox {
     float: left; width: 200rpx;
@@ -41,23 +41,23 @@
 
 <template>
 
-  <block wx:for="{{items}}" wx:for-index="key" wx:for-item="item" wx:key="index">
+  <block wx:for="{{items.items}}" wx:key="index" wx:for-index="key" wx:for-item="item">
 
     <view class="itemList">
-      <view class="imgBox">
-        <image src="{{item.imgUrl}}"></image>
+      <view class="imgBox">图片
+        <!-- <image src="{{item.imgUrl}}"></image> -->
       </view>
       <view class="txtBox">
-        <view class="name">{{item.itemName}}</view>
-        <view class="remark">{{item.remark}}</view>
+        <view class="name">{{item.goods_name}}</view>
+        <view class="remark">{{item.goods_ad || '无说明'}}</view>
         <view class="choiceBox">
-          <view class="price"><text>￥</text>{{item.price}}</view>
+          <view class="price"><text>￥</text>{{item.goods_price}}</view>
           <view class="choiceRight">
-            <text wx:if="{{item.isSpec == 1}}" class="choiceBtn" @tap="cspec({{item.itemId}})">选择规格</text>
+            <text wx:if="{{item.is_spec == 1}}" class="choiceBtn" @tap="cspec({{item.id}})">选择规格</text>
             <block wx:else>
-              <text class="iconfont icon-minus" @tap="minus({{item.itemId}})"></text>
-              <text class="num">{{item.cNum}}</text>
-              <text class="iconfont icon-add" @tap="add({{item.itemId}})"></text>
+              <text class="iconfont icon-minus" @tap="minus({{item.id}})"></text>
+              <text class="num">{{item.goods_num}}</text>
+              <text class="iconfont icon-add" @tap="add({{item.id}})"></text>
             </block>
           </view>
         </view>
@@ -72,6 +72,7 @@
   import wepy from 'wepy'
   import request from '../utils/request';
 
+  const TOKEN = wx.getStorageSync('TOKEN');
   export default class List extends wepy.component {
     data = {
       list: [
@@ -86,6 +87,7 @@
       items: {
         type: Object,
         default: {},
+        twoWay: true,
       },
     }
 
@@ -94,7 +96,7 @@
       // 减商品
       minus(id) {
         let curItem = this.wlist(id);
-        const num = curItem.cNum;
+        const num = curItem.goods_num;
         if (num === 0) return;
         curItem.cNum = num - 1;
       },
@@ -102,8 +104,8 @@
       // 加商品
       add(id) {
         let curItem = this.wlist(id);
-        const num = curItem.cNum;
-        if (num === 99) return;
+        const num = curItem.goods_num;
+        if (num >= 99) return;
         this.doAdd(curItem);
         curItem.cNum = num + 1;
       },
@@ -117,15 +119,16 @@
     }
 
     // 加入购物车
-    doAdd() {
+    doAdd(curItem) {
       let params = {
-        token: '',
-        goods_id: '',
+        token: TOKEN,
+        goods_id: curItem.id,
         spec_ids: '',
-        cart_num: ''
+        cart_num: curItem.goods_num + 1,
       }
+      console.log(params);
       request({
-        url: 'cart/add',
+        url: '/cart/add',
         data: params,
         success: function (data) {
           console.log(data);
@@ -136,9 +139,9 @@
     // 获取对应商品
     wlist(id) {
       let curItem = {};
-      for (let i in this.items) {
-        let ii = this.items[i];
-        if (ii.itemId == id) {
+      for (let i in this.items.items) {
+        let ii = this.items.items[i];
+        if (ii.id == id) {
           curItem = ii;
           break;
         }

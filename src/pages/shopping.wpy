@@ -12,24 +12,15 @@
   <view class="outBox">
     <view class="leftBox">
       <scroll-view scroll-y scroll-with-animation bindscroll="scroll" scroll-into-view="{{sorftPos}}" style="height: {{SystemInfo.windowHeight}}px;">
-        <view wx:for="{{cate}}" wx:key="index" class="sTit">{{item.name}}</view>
+        <view wx:for="{{category}}" wx:key="index" class="sTit">{{item.category_name}}</view>
       </scroll-view>
     </view>
     <view class="rightBox">
       <scroll-view scroll-y scroll-with-animation bindscroll="scroll" scroll-into-view="{{itemPos}}" style="height: {{SystemInfo.windowHeight}}px;">
-
-        <!-- <block wx:for="{{allItems}}" wx:for-index="key" wx:for-item="items">
-          <view>{{cate[key].name}}</view>
-          <repeat for="{{items}}" index="index" item="sitem">
-            <itemlist :item="sitem"></itemlist>
-          </repeat>
-        </block> -->
-
-        <repeat for="{{allItems}}" index="index" item="items">
-          <view class="cateTit">{{cate[index].name}}</view>
-          <itemlist :items="items"></itemlist>
+        <repeat for="{{goods}}" index="index" item="items">
+          <view class="cateTit">{{items.category_name}}</view>
+          <itemlist :items.sync="items"></itemlist>
         </repeat>
-
       </scroll-view>
     </view>
   </view>
@@ -44,7 +35,10 @@
   import Itemlist from '../components/itemlist';
   import Spec from '../components/spec';
   import { itemsData } from '../utils/idata.js';
+  import request from '../utils/request';
+  import login from '../utils/login';
 
+  const TOKEN = wx.getStorageSync('TOKEN');
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: 'test1231'
@@ -52,10 +46,10 @@
 
     data = {
       sorftPos: "",
-      items: [],
+      items: {},
       list: {},
-      cate: {},
-      allItems: {},
+      category: {}, // 分类
+      goods: {}, // 全部商品
       item: {},
       visiablespec: false,
       itemspec: {},
@@ -91,44 +85,8 @@
       // let aasdfa = await wepy.getSystemInfo();
       // console.log(this.SystemInfo);
       this.rItems();
+      login.cToken();
 
-    }
-
-    // 格式化数据
-    formatItems(listArr) {
-      let cate = {};
-      let allItems = {};
-      for (let i in listArr) {
-        const items = listArr[i].items || [];
-        if (items.length == 0) continue;
-        cate[listArr[i].category_id] = {name: listArr[i].category_name};
-        let arrItem = [];
-        for (let j in items) {
-          let itemsList = items[j];
-          let group = {};
-          for (let k in itemsList.goods_skuid) {
-            let sku = itemsList.goods_skuid[k];
-            group[sku.spec_ids] = {skuid: sku.skuid, price: sku.goods_price};
-          }
-          arrItem.push({
-            itemId: itemsList.id,
-            itemName: itemsList.goods_name,
-            cNum: 0,
-            imgUrl: itemsList.goods_logo || '/src/images/item.png',
-            remark: itemsList.goods_desc || '送蜡烛10支，每个账号限买一个',
-            price: itemsList.goods_price,
-            isSpec: itemsList.is_spec,
-            spec: itemsList.spec_group_info,
-            selectSpec: [],
-            group: group
-          });
-        }
-        allItems[listArr[i].category_id] = arrItem;
-      }
-      return {
-        cate: cate,
-        allItems: allItems,
-      }
     }
 
     // 获取商品
@@ -141,13 +99,10 @@
       //   }
       // });
 
-      const origiData = itemsData;
+      const res = itemsData.data;
 
-      const itemData = this.formatItems(origiData.data.goods);
-      console.log(itemData);
-
-      this.cate = itemData.cate;
-      this.allItems = itemData.allItems;
+      this.category = res.category;
+      this.goods = res.goods;
 
     }
 

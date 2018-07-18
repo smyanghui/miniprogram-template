@@ -10,19 +10,19 @@ page {
 </style>
 
 <script>
-import wepy from 'wepy'
-import 'wepy-async-function'
+import wepy from 'wepy';
+import 'wepy-async-function';
+// import request from './utils/request';
 
 export default class extends wepy.app {
   config = {
     pages: [
       'pages/tool',
-      // 'pages/index',
-      // 'pages/shopping',
-      // 'pages/cart',
-      // 'pages/my',
-      // 'pages/my/order',
-      // 'pages/my/weather'
+      'pages/index',
+      'pages/shopping',
+      'pages/cart',
+      'pages/my',
+      'pages/my/order',
     ],
     subPackages: [
       {
@@ -63,7 +63,7 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
-    this.testAsync()
+    // this.testAsync()
   }
 
   sleep (s) {

@@ -1,57 +1,61 @@
+
 import wepy from 'wepy';
+import request from './request';
 
-class Login {
+const APPID = 'wx38c2b93884cce8c6';
 
-  constructor() {}
+const login = {};
 
-  // 微信登录
-  openLogin(type, callback) {
-    wx.login({
-      success: (res) => {
-        this.appLogin({ code: res.code }, callback);
-      },
-      error() {
-        wx.showToast({ title: '登录失败' });
+// 服务器登录
+function appLogin(code) {
+  request({
+    url: '/xcx/login',
+    data: { code, appid: APPID },
+    success: (res) => {
+      if (res.code == 0) {
+        wx.setStorageSync('TOKEN', res.data.token);
+      } else {
+        wx.showToast({ icon: 'none', title: '登录失败' });
       }
-    })
-  }
-
-  // 服务器登录
-  appLogin(data, callback) {
-    wepy.request({
-      method: 'POST',
-      url: '/user/login',
-      data,
-      success(res) {
-        const result = res.result;
-        if (res.code > 0) {
-          wx.showModal({
-            showCancel: false,
-            content: '信息获取异常',
-          });
-          return;
-        }
-        wx.setStorageSync('nickname', res.nickname || '');
-        wx.setStorageSync('headimgurl', res.headimgurl || '');
-        wx.setStorageSync('token', res.token || '');
-        callback && callback();
-      },
-      fail(err) {
-        wx.showToast({ title: '登录失败' });
-      }
-    });
-  }
-
-  // 获取微信用户信息
-  getUserInfo(callback) {
-    wx.getUserInfo({
-      success(res) {
-        wx.setStorageSync('nickname', res.nickname || '');
-        wx.setStorageSync('headimgurl', res.headimgurl || '');
-      }
-    })
-  }
-
+    }
+  })
 }
 
-export default Login;
+// 微信登录
+login.wxLogin = function() {
+  wx.login({
+    success: (res) => {
+      if (res.code) {
+        appLogin(res.code);
+      } else {
+        wx.showToast({ icon: 'none', title: '登录失败' });
+      }
+    }
+  })
+}
+
+// 获取用户信息
+function rUser(callback) {
+  // wx.getUserInfo({
+  //   success(res) {
+  //     wx.setStorageSync('nickname', res.nickname || '');
+  //     wx.setStorageSync('headimgurl', res.headimgurl || '');
+  //   }
+  // })
+}
+
+login.cToken = function() {
+  let curToken = wx.getStorageSync('TOKEN');
+  if (!curToken) return login.wxLogin();
+  request({
+    url: '/check/token',
+    data: { token: curToken },
+    success: (res) => {
+      if (res.code == 0) {
+        if (!res.data.islogin) login.wxLogin();
+      }
+    }
+  })
+}
+
+export default login;
