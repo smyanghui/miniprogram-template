@@ -2,6 +2,7 @@ import wepy from 'wepy';
 
 function request(params = {}) {
   const { url, method = 'get', data, success, fail, complete } = params;
+  wx.showLoading({ title: '数据加载中...' });
   wepy.request({
     url: `https://devapi.nfangbian.com${url}`,
     method,
@@ -10,7 +11,7 @@ function request(params = {}) {
       if (res.code > 0) {
         wx.showModal({
           showCancel: false,
-          content: res.message,
+          content: res.msg,
         });
         return;
       }
@@ -24,6 +25,7 @@ function request(params = {}) {
       fail && fail();
     },
     complete() {
+      wx.hideLoading();
       complete && complete();
     },
   });

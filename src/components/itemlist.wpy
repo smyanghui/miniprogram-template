@@ -1,5 +1,5 @@
 <style lang="less">
-.itemList_aaaa {
+.itemListaa {
   height: 180rpx; padding: 10rpx; border-bottom: 1rpx solid #eee;
   .imgBox {
     float: left; width: 200rpx;
@@ -44,8 +44,8 @@
   <block wx:for="{{items.items}}" wx:key="index" wx:for-index="key" wx:for-item="item">
 
     <view class="itemList">
-      <view class="imgBox">图片
-        <!-- <image src="{{item.imgUrl}}"></image> -->
+      <view class="imgBox">
+        <image src="{{item.goods_logoaa}}"></image>
       </view>
       <view class="txtBox">
         <view class="name">{{item.goods_name}}</view>
@@ -72,7 +72,6 @@
   import wepy from 'wepy'
   import request from '../utils/request';
 
-  const TOKEN = wx.getStorageSync('TOKEN');
   export default class List extends wepy.component {
     data = {
       list: [
@@ -98,7 +97,8 @@
         let curItem = this.wlist(id);
         const num = curItem.goods_num;
         if (num === 0) return;
-        curItem.cNum = num - 1;
+        this.doMinus(curItem);
+        // curItem.goods_num = num - 1;
       },
 
       // 加商品
@@ -107,7 +107,6 @@
         const num = curItem.goods_num;
         if (num >= 99) return;
         this.doAdd(curItem);
-        curItem.cNum = num + 1;
       },
 
       // 选规格
@@ -118,20 +117,39 @@
 
     }
 
+    // 单个删除商品
+    doMinus(curItem) {
+      const TOKEN = wx.getStorageSync('TOKEN');
+      let params = {
+        token: TOKEN,
+        id: curItem.id,
+        op: 2,
+        cart_num: 1,
+      }
+      request({
+        url: '/cart/addminus',
+        data: params,
+        success: (res) => {
+          curItem.goods_num--;
+          this.$apply();
+        }
+      });
+    }
+
     // 加入购物车
     doAdd(curItem) {
+      const TOKEN = wx.getStorageSync('TOKEN');
       let params = {
         token: TOKEN,
         goods_id: curItem.id,
-        spec_ids: '',
         cart_num: curItem.goods_num + 1,
       }
-      console.log(params);
       request({
         url: '/cart/add',
         data: params,
-        success: function (data) {
-          console.log(data);
+        success: (res) => {
+          curItem.goods_num = params.cart_num;
+          this.$apply();
         }
       });
     }

@@ -24,7 +24,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 4,
 			"list": [
 				{
 					"id": -1,
@@ -48,6 +48,12 @@
 					"id": 3,
 					"name": "nav",
 					"pathName": "pages/tool",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "cart",
+					"pathName": "pages/cart",
 					"query": ""
 				}
 			]

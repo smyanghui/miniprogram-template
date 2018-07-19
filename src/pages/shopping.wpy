@@ -25,7 +25,7 @@
     </view>
   </view>
 
-  <spec :visiable.sync="visiablespec" :itemspec.sync="itemspec"></spec>
+  <spec :visiable.sync="visiablespec" :groupitem.sync="groupitem"></spec>
 
 </template>
 
@@ -34,11 +34,9 @@
   import common from '../mixins/common';
   import Itemlist from '../components/itemlist';
   import Spec from '../components/spec';
-  import { itemsData } from '../utils/idata.js';
   import request from '../utils/request';
   import login from '../utils/login';
 
-  const TOKEN = wx.getStorageSync('TOKEN');
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: 'test1231'
@@ -52,7 +50,7 @@
       goods: {}, // 全部商品
       item: {},
       visiablespec: false,
-      itemspec: {},
+      groupitem: {},
     };
 
     mixins = [common];
@@ -65,7 +63,7 @@
     events = {
       openSpec: (item) => {
         this.visiablespec = true;
-        this.itemspec = item;
+        this.groupitem = item;
       },
     }
 
@@ -91,19 +89,15 @@
 
     // 获取商品
     rItems() {
-
-      // wx.request({
-      //   url: 'https://devapi.nfangbian.com/index/goods',
-      //   success: function (data) {
-      //       console.log(data);
-      //   }
-      // });
-
-      const res = itemsData.data;
-
-      this.category = res.category;
-      this.goods = res.goods;
-
+      request({
+        url: '/index/goods',
+        success: (data) => {
+          const res = data.data;
+          this.category = res.category;
+          this.goods = res.goods;
+          this.$apply();
+        }
+      });
     }
 
     scroll(e) {

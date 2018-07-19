@@ -30,9 +30,9 @@
 <template>
   <view class="mask" wx:if="{{visiable}}">
     <view class="specBox">
-      <view class="specTitle">{{itemspec.itemName}}</view>
+      <view class="specTitle">{{groupitem.goods_name}}</view>
       <view class="specBody">
-        <block wx:for="{{itemspec.spec}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+        <block wx:for="{{groupitem.spec_group_info}}" wx:for-index="index" wx:for-item="item" wx:key="index">
           <view>{{item.spec_group_name}}</view>
           <view>
             <block wx:for="{{item.spec_group_list}}" wx:for-index="indexa" wx:for-item="itema" wx:key="indexa">
@@ -40,21 +40,24 @@
             </block>
           </view>
         </block>
+        <view>￥{{selectSku.goods_price}}</view>
       </view>
       <view class="specFooter">
         <view class="cancel" @tap="cancelSpec">取消</view>
-        <view class="sure">确定</view>
+        <view class="sure" @tap="sureSpec">确定</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-  import wepy from 'wepy'
+  import wepy from 'wepy';
+  import request from '../utils/request';
 
   export default class Spec extends wepy.component {
 
     data = {
+      selectSku: {}, // 选中的规格组合
     }
 
     props = {
@@ -63,7 +66,7 @@
         default: false,
         twoWay: true,
       },
-      itemspec: {
+      groupitem: {
         type: Object,
         default: {},
         // twoWay: true,
@@ -71,26 +74,88 @@
     }
 
     methods = {
-      selectSpec(gid, sid) {
-        for (let i in this.itemspec.spec) {
-          let group = this.itemspec.spec[i];
-          if (gid != group.spec_group_id) continue;
-          for (let j in group.spec_group_list) {
-            let list = group.spec_group_list[j];
-            list.is_select = list.spec_id == sid;
-          }
-        }
+
+      selectSpec(groupid, specid) {
+        this.doSelect(groupid, specid);
       },
 
       cancelSpec() {
         this.visiable = false;
       },
+
+      sureSpec() {
+        this.doAdd();
+      },
+
+    }
+
+    // 选择规格
+    doSelect(groupid = 0, specid = 0) {
+      let selectSid = [];
+      for (let i in this.groupitem.spec_group_info) {
+        let group = this.groupitem.spec_group_info[i];
+        for (let j in group.spec_group_list) {
+          let list = group.spec_group_list[j];
+          let isIni = j == 0 && groupid == 0 && specid == 0;
+          list.is_select = isIni ? isIni : (list.spec_id == specid);
+          if (list.is_select) selectSid.push(list.spec_id);
+        }
+      }
+      // 获取组合价格
+      for ( let i in this.groupitem.goods_skuid) {
+        let sku = this.groupitem.goods_skuid[i];
+        if (sku.spec_ids == selectSid.join(',')) this.selectSku = sku;
+      }
+    }
+
+    // 加入购物车
+    doAdd(curItem) {
+
+      // let listLen = 0;
+      // let listSelect = [];
+      // for (let i in this.groupitem.spec_group_info) {
+      //   let group = this.groupitem.spec_group_info[i];
+      //   listLen++;
+      //   for (let j in group.spec_group_list) {
+      //     let list = group.spec_group_list[j];
+      //     if (list.is_select) listSelect.push(list.spec_id);
+      //   }
+      // }
+      // if (listSelect.length != listLen) {
+      //   wx.showToast({ icon: 'none', title: '请选择规格！' });
+      //   return;
+      // }
+
+      // let goodsSku = {};
+      // for ( let i in this.groupitem.goods_skuid) {
+      //   let sku = this.groupitem.goods_skuid[i];
+      //   if (sku.spec_ids == listSelect.join(',')) goodsSku = sku;
+      // }
+
+      const TOKEN = wx.getStorageSync('TOKEN');
+      let params = {
+        token: TOKEN,
+        goods_id: this.groupitem.id,
+        spec_ids: this.selectSku.spec_ids,
+        cart_num: 1,
+      }
+      request({
+        url: '/cart/add',
+        data: params,
+        success: (res) => {
+          console.log(res);
+          this.visiable = false;
+        }
+      });
     }
 
     watch = {
-      // itemspec(val) {
-      //   console.log(val);
-      // }
+      visiable(val) {
+        setTimeout( () => {
+          if (val) this.doSelect();
+          this.$apply();
+        }, 0);
+      }
     }
 
   }
