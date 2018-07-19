@@ -32,4 +32,13 @@ function request(params = {}) {
 
 }
 
+function formatMoney(val) {
+  let rVal = parseInt(val);
+  if (!rVal || rVal <= 0) return '0.00';
+  let sVal = String(rVal);
+  if (sVal.length == 1) sVal = '00'+ sVal;
+  if (sVal.length == 2) sVal = '0'+ sVal;
+  return sVal.replace(/(\d+)(\d{2})$/, '$1.$2');
+}
+
 export default request;

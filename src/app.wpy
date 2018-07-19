@@ -3,10 +3,6 @@
 page {
   font-smoothing: antialiased; /*抗锯齿*/
 }
-.container {
-  height: 100%;
-  box-sizing: border-box;
-}
 </style>
 
 <script>
@@ -59,36 +55,11 @@ export default class extends wepy.app {
 
   constructor () {
     super()
-    this.use('requestfix')
+    // this.use('requestfix')
   }
 
   onLaunch() {
-    // this.testAsync()
   }
 
-  sleep (s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
-  }
-
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
-  }
-
-  getUserInfo(cb) {
-    if (this.globalData.userInfo) {
-      return this.globalData.userInfo
-    }
-    wepy.getUserInfo({
-      success (res) {
-        this.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
-      }
-    })
-  }
 }
 </script>
