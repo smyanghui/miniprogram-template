@@ -9,8 +9,8 @@
 	},
 	"compileType": "miniprogram",
 	"appid": "wx38c2b93884cce8c6",
-	"projectname": "mytestaa",
-	"miniprogramRoot": "./dist",
+	"projectname": "tool",
+	"miniprogramRoot": "dist/",
 	"condition": {
 		"search": {
 			"current": -1,

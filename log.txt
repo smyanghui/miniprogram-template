@@ -2,6 +2,9 @@
 csyhsir@163.com
 小程序开发文档地址：https://developers.weixin.qq.com/miniprogram/dev/
 
+基于wpy
+参考文档地址：https://tencent.github.io/wepy/
+
 1.新邮箱申请小程序注册https://mp.weixin.qq.com/wxopen/waregister?action=step1
 2.“设置”-“开发设置” 找到小程序 AppID
 3.到“微信开发者工具”新增项目，选择 QuickStart，目录下则生成实例文件
@@ -27,9 +30,9 @@ onReady: 页面初次渲染完成，一个页面只会调用一次，代表页�
 onHide: 页面隐藏，当navigateTo或底部tab切换时调用。
 onUnload: 页面卸载
 
-
-
-
+开发步骤
+git clone
+npm install
 
 
 

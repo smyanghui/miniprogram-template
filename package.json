@@ -1,7 +1,7 @@
 {
-  "name": "mytest",
-  "version": "0.0.2",
-  "description": "aa",
+  "name": "smallapptool",
+  "version": "0.0.3",
+  "description": "实践",
   "main": "dist/app.js",
   "scripts": {
     "dev": "wepy build --watch",
@@ -14,7 +14,7 @@
     "module-a": false,
     "./src/components/list": "./src/components/wepy-list.wpy"
   },
-  "author": "yanghui <wb_yanghui@zhongan.com>",
+  "author": "csyhsir@163.com",
   "license": "MIT",
   "dependencies": {
     "wepy": "^1.6.0",
