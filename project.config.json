@@ -1,7 +1,7 @@
 {
 	"description": "aa",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": false,
 		"postcss": false,
 		"minified": false,
@@ -24,7 +24,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 4,
+			"current": 6,
 			"list": [
 				{
 					"id": -1,
@@ -54,6 +54,18 @@
 					"id": -1,
 					"name": "cart",
 					"pathName": "pages/cart",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "my",
+					"pathName": "pages/my",
+					"query": ""
+				},
+				{
+					"id": 6,
+					"name": "cook",
+					"pathName": "packageTool/pages/cookDetail",
 					"query": ""
 				}
 			]

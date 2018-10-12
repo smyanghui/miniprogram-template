@@ -12,8 +12,8 @@
   <view class="outBox">
 
     <view class="myList">
-      <navigator url="./order">订单列表</navigator>
-      <navigator url="./order">我的信息</navigator>
+      <navigator url="./my/order">订单列表</navigator>
+      <navigator url="./my/user">我的信息</navigator>
     </view>
 
   </view>
@@ -26,7 +26,7 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '订单列表'
+      navigationBarTitleText: '我的'
     };
 
     data = {
@@ -43,12 +43,7 @@
     }
 
     onLoad() {
-      this.rItems();
-    }
-
-    rData() {
-      const aa = 123;
-      return {"code":0}
+      // this.rItems();
     }
 
     // 获取商品

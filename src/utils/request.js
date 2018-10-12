@@ -7,7 +7,8 @@ function request(params = {}) {
     url: `https://devapi.nfangbian.com${url}`,
     method,
     data,
-    success(res) {
+    success(data) {
+      let res = data.data;
       if (res.code > 0) {
         wx.showModal({
           showCancel: false,
@@ -15,7 +16,7 @@ function request(params = {}) {
         });
         return;
       }
-      success && success(res.data);
+      success && success(res);
     },
     fail(res) {
       wx.showModal({

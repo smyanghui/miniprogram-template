@@ -1,5 +1,5 @@
 <style lang="less">
-.itemListaa {
+.itemList {
   height: 180rpx; padding: 10rpx; border-bottom: 1rpx solid #eee;
   .imgBox {
     float: left; width: 200rpx;
@@ -45,7 +45,7 @@
 
     <view class="itemList">
       <view class="imgBox">
-        <image src="{{item.goods_logoaa}}"></image>
+        <image src="{{item.goods_logo}}"></image>
       </view>
       <view class="txtBox">
         <view class="name">{{item.goods_name}}</view>

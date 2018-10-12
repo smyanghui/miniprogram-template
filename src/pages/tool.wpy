@@ -66,6 +66,12 @@
           <text class="nav_txt">个人中心</text>
         </navigator>
       </view>
+      <view class="color_4">
+        <navigator url="../packageTool/pages/cook" hover-class="none">
+          <text class="iconfont icon-wxbzhanghu"></text>
+          <text class="nav_txt">菜谱</text>
+        </navigator>
+      </view>
     </view>
 
   </view>

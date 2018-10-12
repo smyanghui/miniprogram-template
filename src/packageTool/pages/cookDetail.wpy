@@ -1,0 +1,121 @@
+<style lang="less">
+
+.outBox {}
+
+.detail {
+  display: flex;
+  .imageBox {
+    width: 350rpx; height: 350rpx;
+    image { width: 100%; height: 100%; display: block; }
+  }
+  .textBox {
+    flex: 1; padding: 5px 10px;
+    view { margin-bottom: 10px; line-height: 18px; }
+    .name { font-size: 16px; color: #333; }
+    .tag { font-size: 12px; color: #666; }
+  }
+}
+
+.cookTab {
+  font-size: 14px; color: #666; line-height: 35px; text-align: center;
+  border-bottom: 1rpx solid #ddd; box-shadow: 1px 1px 2px #ccc;
+  view { display: inline-block; width: 33.33%; }
+  .midTab { box-sizing: border-box; border-left: 1rpx solid #ddd; border-right: 1rpx solid #ddd; }
+  .curTab { color: #f60; }
+}
+
+.material {
+  font-size: 14px; color: #333; line-height: 30px; padding: 10px;
+}
+.process {
+  font-size: 14px; color: #333; line-height: 24px; padding: 10px;
+  image { display: block; width: 500rpx; height: 500rpx; margin-bottom: 10px; }
+  view { padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1rpx solid #ddd; }
+}
+.content {
+  font-size: 14px; color: #333; line-height: 24px; padding: 10px;
+}
+
+</style>
+
+<template>
+  <view class="outBox">
+
+    <view class="detail">
+      <view class="imageBox">
+        <image src="{{detail.pic}}"></image>
+      </view>
+      <view class="textBox">
+        <view class="name">{{detail.name}}</view>
+        <view class="tag">{{detail.tag}}</view>
+        <view class="tag">食量：{{detail.peoplenum}}</view>
+        <view class="tag">准备时间：{{detail.preparetime}}</view>
+        <view class="tag">烹饪时间：{{detail.cookingtime}}</view>
+      </view>
+    </view>
+
+    <view class="cookTab">
+      <view class="{{tabNum == 1 ? 'curTab' : ''}}" @tap="changeTab(1)">食材</view>
+      <view class="{{tabNum == 2 ? 'midTab curTab' : 'midTab'}}" @tap="changeTab(2)">步骤</view>
+      <view class="{{tabNum == 3 ? 'curTab' : ''}}" @tap="changeTab(3)">描述</view>
+    </view>
+
+    <view class="material" wx:if="{{tabNum == 1}}">
+      <view wx:for="{{detail.material}}" wx:key="index">
+        {{item.mname}}（{{item.amount}}）
+      </view>
+    </view>
+
+    <view class="process" wx:if="{{tabNum == 2}}">
+      <view wx:for="{{detail.process}}" wx:key="index">
+        <image src="{{item.pic}}"></image>
+        <text>{{item.pcontent}}</text>
+      </view>
+    </view>
+
+    <view class="content" wx:if="{{tabNum == 3}}">
+      <text>{{detail.content}}</text>
+    </view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class CookDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '菜谱',
+      enablePullDownRefresh: true,
+    };
+
+    data = {
+      detail: {},
+      tabNum: 1,
+    };
+
+    components = {
+    }
+
+    methods = {
+
+      changeTab(num) {
+        this.tabNum = num;
+      },
+
+    }
+
+    onLoad(options) {
+      let cookDetail = wx.getStorageSync('cookDetail');
+      for (let i in cookDetail.process) {
+        cookDetail.process[i].pcontent = cookDetail.process[i].pcontent.replace(/<br \/>/g, '\n');
+      }
+      cookDetail.content = cookDetail.content.replace(/<br \/>/g, '\n');
+      this.detail = cookDetail;
+      console.log(123, this.detail);
+    }
+
+
+
+  }
+</script>

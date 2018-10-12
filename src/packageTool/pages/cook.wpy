@@ -1,0 +1,110 @@
+<style lang="less">
+.outBox {}
+
+.searchBox {
+  padding: 20rpx;
+  .searchInput { box-shadow: 1px 1px 3px #ccc; padding: 10px; text-align: center; }
+}
+
+.list {
+  width: 345rpx; margin-left: 20rpx; margin-bottom: 20rpx; box-sizing: border-box;
+  padding: 20rpx; font-size: 14px; float: left; box-shadow: 1px 1px 3px #ccc;
+  image { width: 305rpx; height: 305rpx; }
+  view {
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+    text-align: center;
+  }
+  .name { font-size: 16px; color: #333; }
+  .tag { font-size: 12px; color: #666; line-height: 30px; }
+}
+
+</style>
+
+<template>
+  <view class="outBox">
+
+    <view class="searchBox">
+      <input class="searchInput" placeholder="菜谱名" value="{{keyword}}" @blur="search" />
+    </view>
+
+    <view class="list" wx:for="{{list}}" wx:key="index" @tap="detail({{item.id}})">
+      <image src="{{item.pic}}"></image>
+      <view class="name">{{item.name}}</view>
+      <view class="tag">{{item.tag}}</view>
+    </view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Cook extends wepy.page {
+    config = {
+      navigationBarTitleText: '菜谱',
+      // enablePullDownRefresh: true,
+    };
+
+    data = {
+      keyword: '',
+      list: [],
+    };
+
+    components = {
+    }
+
+    methods = {
+
+      search(e) {
+        this.keyword = e.detail.value;
+        this.rCook(this.keyword || '萝卜');
+      },
+
+      detail(id) {
+        for (let i in this.list) {
+          let li = this.list[i];
+          if (li.id == id) wx.setStorageSync('cookDetail', li);
+        }
+        wx.navigateTo({ url: './cookDetail' })
+      },
+
+    }
+
+    onLoad(options) {
+    }
+
+    // onPullDownRefresh() {
+    //   wx.showNavigationBarLoading();
+    // }
+
+    rCook(kw) {
+      const AK = '1266b63174aab7757672664866079e25';
+      let params = {
+        appkey: AK,
+        keyword: kw,
+        num: 20
+      };
+      wx.request({
+        url: 'https://way.jd.com/jisuapi/search',
+        data: params,
+        success: (data) => {
+          const res = data.data.result;
+          if (res.status != 0) {
+            wx.showModal({
+              showCancel: false,
+              content: res.msg,
+            });
+            return;
+          }
+          this.list = res.result && res.result.list;
+          this.$apply();
+        },
+        complete: () => {
+          // wx.hideNavigationBarLoading();
+          // wx.stopPullDownRefresh();
+        }
+      });
+    }
+
+  }
+</script>
